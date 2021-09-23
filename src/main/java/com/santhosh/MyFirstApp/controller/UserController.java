@@ -2,10 +2,10 @@ package com.santhosh.MyFirstApp.controller;
 
 import com.santhosh.MyFirstApp.model.Student;
 import com.santhosh.MyFirstApp.model.User;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -15,9 +15,13 @@ public class UserController {
         return new User(112,"Shiva",1000,"Kailash");
     }
 
+    // use the @ResponseBody annotation for @Controller. the @RestController have the @ResponseBody annotation by default.
+    //public @ResponseBody Student getUserName(){}
     @RequestMapping(value="/student", method = RequestMethod.GET)
-    public Student getUserName(){
-        return new Student(1,"San", 28, "Siddigam",1100,"B.Tech");
+    public Student getUserName(@RequestHeader(value = "role") String role, @RequestHeader(value = "jwt") String jwt, @RequestBody User user){
+        System.out.println(role);
+        System.out.println(jwt);
+        return new Student(user.getId(), user.getName(), user.getAge(), user.getLocation(), 1100,"B.Tech");
     }
 
 }
